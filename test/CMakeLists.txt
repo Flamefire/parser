@@ -7,22 +7,6 @@ add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} -j4 -C $<CONFIG>)
 ##################################################
 # Parser tests
 ##################################################
-add_executable(parser_ parser.cpp)
-set_property(TARGET parser_ PROPERTY CXX_STANDARD ${CXX_STD})
-target_link_libraries(parser_ parser gtest gtest_main ${link_flags})
-if (MSVC)
-    target_compile_options(parser_ PRIVATE /source-charset:utf-8 /bigobj)
-endif ()
-add_test(NAME parser_ COMMAND parser_ ---gtest_catch_exceptions=1)
-
-add_executable(parser_api parser_api.cpp)
-set_property(TARGET parser_api PROPERTY CXX_STANDARD ${CXX_STD})
-target_link_libraries(parser_api parser gtest gtest_main ${link_flags})
-if (MSVC)
-    target_compile_options(parser_api PRIVATE /source-charset:utf-8 /bigobj)
-endif ()
-add_test(NAME parser_api COMMAND parser_api ---gtest_catch_exceptions=1)
-
 add_executable(
     compile_tests
     compile_tests_main.cpp
@@ -34,15 +18,20 @@ add_executable(
 set_property(TARGET compile_tests PROPERTY CXX_STANDARD ${CXX_STD})
 target_link_libraries(compile_tests parser)
 
-macro(add_test_executable name)
-    add_executable(${name} ${name}.cpp)
+function(add_test_executable name)
+    if(ARGC EQUAL 1)
+        set(src "${name}.cpp")
+    else()
+        set(src "${ARGV1}")
+    endif()
+    add_executable(${name} ${src})
     set_property(TARGET ${name} PROPERTY CXX_STANDARD ${CXX_STD})
     target_link_libraries(${name} parser gtest gtest_main ${link_flags})
     if (MSVC)
         target_compile_options(${name} PRIVATE /source-charset:utf-8 /bigobj)
     endif ()
     add_test(NAME ${name} COMMAND ${name} --gtest_catch_exceptions=1)
-endmacro()
+endfunction()
 
 add_test_executable(all_t)
 add_test_executable(search)
@@ -51,6 +40,8 @@ add_test_executable(replace)
 add_test_executable(transform_replace)
 add_test_executable(hl)
 add_test_executable(aggr_tuple_assignment)
+add_test_executable(parser_ parser.cpp)
+add_test_executable(parser_api)
 add_test_executable(parser_lazy_params)
 add_test_executable(parser_if_switch)
 add_test_executable(parser_rule)
