@@ -18,10 +18,6 @@ endif ()
 # Build config
 ##################################################
 set(BUILD_WITHOUT_HANA false CACHE BOOL "Build with BOOST_PARSER_DISABLE_HANA_TUPLE defined.")
-if (BUILD_WITHOUT_HANA)
-  add_definitions(-DBOOST_PARSER_DISABLE_HANA_TUPLE)
-endif()
-
 
 ##################################################
 # Dependencies
@@ -55,6 +51,9 @@ add_library(parser INTERFACE)
 target_include_directories(parser INTERFACE ${PROJECT_SOURCE_DIR}/include)
 if (Boost_FOUND)
    target_link_libraries(parser INTERFACE Boost::headers)
+endif()
+if (BUILD_WITHOUT_HANA)
+  target_compile_definitions(parser INTERFACE BOOST_PARSER_DISABLE_HANA_TUPLE)
 endif()
 
 ##################################################
