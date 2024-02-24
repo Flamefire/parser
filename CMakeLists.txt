@@ -5,8 +5,8 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 ##################################################
 # C++ standard version selection
 ##################################################
-set(CXX_STD 17 CACHE STRING "Set to 14, 17, etc., to enable C++14, C++17, etc.")
-message("-- Using -std=c++${CXX_STD}")
+set(CMAKE_CXX_STANDARD 17 CACHE STRING "Set to 14, 17, etc., to enable C++14, C++17, etc.")
+message("-- Using -std=c++${CMAKE_CXX_STANDARD}")
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL Clang)
     add_definitions(-g -Wall)
