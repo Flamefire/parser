@@ -11,4 +11,4 @@ find_package(Boost)
 ###############################################################################
 # GoogleTest
 ###############################################################################
-add_subdirectory(${CMAKE_SOURCE_DIR}/googletest-release-1.10.0)
+add_subdirectory(${PROJECT_SOURCE_DIR}/googletest-release-1.10.0)
